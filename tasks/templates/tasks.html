@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="py-5" style="background-color: #020617; min-height: 80vh;">
+    <div class="container px-4" style="max-w: 1100px;">
+        
+        <div class="d-flex flex-col flex-md-row justify-content-between align-items-md-center gap-3 mb-5 pb-3 border-bottom" style="border-color: #1e293b !important;">
+            <div>
+                <h1 class="fw-black text-white mb-1" style="font-weight: 800; letter-spacing: -0.03em;">
+                    Lista de Pendientes
+                </h1>
+                <p class="text-secondary small mb-0">Gestiona y haz seguimiento a tus actividades diarias</p>
+            </div>
+            
+            <div class="d-flex gap-2">
+                <a href="{% url 'tasksCompleted' %}" class="btn px-3 py-2 fw-medium text-slate-300 rounded-3 text-white" 
+                   style="background-color: #0f172a; border: 1px solid #1e293b; font-size: 0.9rem; transition: background-color 0.2s;"
+                   onmouseover="this.style.backgroundColor='#1e293b'" onmouseout="this.style.backgroundColor='#0f172a'">
+                    <i class="bi bi-check2-all me-1" style="color: #34d399;"></i> Completadas
+                </a>
+                <a href="{% url 'createTask' %}" class="btn px-3 py-2 fw-bold rounded-3" 
+                   style="background-color: #34d399; color: #020617; border: none; font-size: 0.9rem; transition: transform 0.2s;"
+                   onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='none'">
+                    <i class="bi bi-plus-lg me-1"></i> Crear Tarea
+                </a>
+            </div>
+        </div>
+
+        {% if msg %}
+        <div class="alert alert-info py-2 px-3 rounded-3 border-0 small text-center mb-4" 
+             style="background-color: rgba(56, 189, 248, 0.1); color: #38bdf8;">
+            {{ msg }}
+        </div>
+        {% endif %}
+
+        <div class="row g-3">
+            {% for task in Tasks %}
+            <div class="col-12 col-md-6 col-lg-4">
+                
+                <a href="{% url 'taskDetail' task.id %}" class="d-block text-decoration-none h-100 rounded-4 p-4 border transition-all" 
+                   style="background-color: #0f172a; border-color: #1e293b; transition: all 0.2s; cursor: pointer;"
+                   onmouseover="this.style.borderColor='rgba(52, 211, 153, 0.4)'; this.style.transform='translateY(-2px)'" 
+                   onmouseout="this.style.borderColor='#1e293b'; this.style.transform='none'">
+                    
+                    <div class="d-flex flex-column h-100 justify-content-between">
+                        <div>
+                            <h2 class="h5 fw-bold text-white mb-2 tracking-tight">
+                                {{ task.title }}
+                            </h2>
+                            
+                            <p class="text-secondary small line-clamp-3 mb-4" style="color: #94a3b8 !important; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.5;">
+                                {{ task.description }}
+                            </p>
+                        </div>
+
+                        <div class="pt-3 border-top d-flex justify-content-between align-items-center text-muted small" style="border-color: #1e293b !important; font-size: 0.8rem;">
+                            
+                            <span class="d-flex align-items-center gap-1">
+                                <i class="bi bi-person text-secondary"></i> {{ task.created_by.username }}
+                            </span>
+                            
+                            {% if task.importance %}
+                                <span class="px-2 py-0.5 rounded fw-semibold" style="background-color: rgba(239, 68, 68, 0.1); color: #f87171;">
+                                    💥 Alta
+                                </span>
+                            {% else %}
+                                <span class="px-2 py-0.5 rounded fw-semibold" style="background-color: rgba(148, 163, 184, 0.1); color: #94a3b8;">
+                                    💤 Baja
+                                </span>
+                            {% endif %}
+                            
+                        </div>
+                    </div>
+                    
+                </a>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <div class="text-secondary mb-3" style="font-size: 2rem;">📂</div>
+                <h3 class="h5 text-white fw-bold">No tienes tareas pendientes</h3>
+                <p class="text-secondary small">¡Buen trabajo! Disfruta de tu día libre o crea un nuevo pendiente.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

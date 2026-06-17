@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="py-5" style="background-color: #020617; min-height: 85vh;">
+    <div class="container px-4" style="max-width: 1100px;">
+        
+        <div class="d-flex flex-col flex-md-row justify-content-between align-items-md-center gap-3 mb-5 pb-3 border-bottom" style="border-color: #1e293b !important;">
+            <div>
+                <h1 class="fw-black text-white mb-1" style="font-weight: 800; letter-spacing: -0.03em;">
+                    Detalle de Tarea
+                </h1>
+                <p class="text-secondary small mb-0">Inspecciona, actualiza o gestiona el estado de este pendiente</p>
+            </div>
+            
+            <div>
+                <a href="{% url 'tasks' %}" class="btn px-3 py-2 fw-medium text-slate-300 rounded-3 text-white" 
+                   style="background-color: #0f172a; border: 1px solid #1e293b; font-size: 0.9rem; transition: background-color 0.2s;"
+                   onmouseover="this.style.backgroundColor='#1e293b'" onmouseout="this.style.backgroundColor='#0f172a'">
+                    <i class="bi bi-arrow-left me-1"></i> Volver a Pendientes
+                </a>
+            </div>
+        </div>
+
+        {% if error %}
+        <div class="alert alert-danger py-2 px-3 rounded-3 border-0 small text-center mb-4" 
+             style="background-color: rgba(239, 68, 68, 0.1); color: #f87171;">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="POST" autocomplete="off" class="w-100">
+            {% csrf_token %}
+            
+            <div class="p-4 p-sm-5 rounded-4 shadow-lg border mb-4" style="background-color: #0f172a; border-color: #1e293b !important;">
+                
+                <div class="mb-4">
+                    <span class="text-secondary small text-uppercase tracking-wider fw-bold" style="font-size: 0.75rem;">Título Actual:</span>
+                    <h3 class="text-white h5 fw-medium mt-1 mb-0 opacity-75">{{ task.title }}</h3>
+                </div>
+
+                <div class="django-form-inputs-grid">
+                    {{ form.as_p }}
+                </div>
+
+            </div>
+
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 pt-3">
+                
+                <div class="d-flex gap-2">
+                    <button form="form-complete" type="submit" class="btn px-4 py-2 fw-medium rounded-3 text-white"
+                            style="background-color: rgba(52, 211, 153, 0.1); border: 1px solid rgba(52, 211, 153, 0.2); font-size: 0.95rem; color: #34d399 !important; transition: all 0.2s;"
+                            onmouseover="this.style.backgroundColor='rgba(52, 211, 153, 0.2)'" onmouseout="this.style.backgroundColor='rgba(52, 211, 153, 0.1)'">
+                        <i class="bi bi-check-circle me-1"></i> Completar
+                    </button>
+                    
+                    <button form="form-delete" type="submit" class="btn px-4 py-2 fw-medium rounded-3 text-white"
+                            style="background-color: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); font-size: 0.95rem; color: #f87171 !important; transition: all 0.2s;"
+                            onmouseover="this.style.backgroundColor='rgba(239, 68, 68, 0.2)'" onmouseout="this.style.backgroundColor='rgba(239, 68, 68, 0.1)'">
+                        <i class="bi bi-trash3 me-1"></i> Eliminar
+                    </button>
+                </div>
+
+                <div>
+                    <button type="submit" class="btn px-5 py-2 fw-bold rounded-3 transition-all" 
+                            style="background-color: #34d399; color: #020617; border: none; font-size: 0.95rem; transition: transform 0.2s;"
+                            onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='none'">
+                        <i class="bi bi-cloud-arrow-up me-1"></i> Actualizar
+                    </button>
+                </div>
+                
+            </div>
+        </form>
+
+        <form id="form-complete" action="{% url 'taskComplete' task.id %}" method="POST" class="d-none">
+            {% csrf_token %}
+        </form>
+
+        <form id="form-delete" action="{% url 'taskDelete' task.id %}" method="POST" class="d-none">
+            {% csrf_token %}
+        </form>
+
+    </div>
+</div>
+
+<style>
+    /* Por defecto (móviles): Todo en una sola columna */
+    .django-form-inputs-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .django-form-inputs-grid p {
+        margin-bottom: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .django-form-inputs-grid label {
+        color: #94a3b8;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    
+    .django-form-inputs-grid input[type="text"],
+    .django-form-inputs-grid input[type="number"],
+    .django-form-inputs-grid textarea,
+    .django-form-inputs-grid select {
+        display: block;
+        width: 100%;
+        padding: 0.625rem 0.85rem;
+        font-size: 0.95rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #f8fafc;
+        background-color: #020617;
+        border: 1px solid #1e293b;
+        border-radius: 0.5rem;
+        transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    }
+
+    .django-form-inputs-grid input[type="text"]:focus,
+    .django-form-inputs-grid textarea:focus,
+    .django-form-inputs-grid select:focus {
+        color: #f8fafc;
+        background-color: #020617;
+        border-color: #34d399;
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(52, 211, 153, 0.15);
+    }
+
+    /* Checkbox de importancia */
+    .django-form-inputs-grid p:has(input[type="checkbox"]) {
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 0.75rem;
+        background-color: #020617;
+        padding: 0.75rem 1rem;
+        border: 1px solid #1e293b;
+        border-radius: 0.5rem;
+        height: fit-content;
+    }
+
+    .django-form-inputs-grid p:has(input[type="checkbox"]) label {
+        margin-bottom: 0;
+        cursor: pointer;
+    }
+
+    .django-form-inputs-grid input[type="checkbox"] {
+        width: 1.25rem;
+        height: 1.25rem;
+        background-color: #020617;
+        border: 1px solid #1e293b;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+        display: inline-block;
+        position: relative;
+    }
+    .django-form-inputs-grid input[type="checkbox"]:checked {
+        background-color: #34d399;
+        border-color: #34d399;
+    }
+    .django-form-inputs-grid input[type="checkbox"]:checked::after {
+        content: "✓";
+        position: absolute;
+        color: #020617;
+        font-size: 0.85rem;
+        font-weight: bold;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    /* ==========================================================================
+       DISTRIBUCIÓN EN LAPTOPS Y ESCRITORIO (CSS GRID ASIMÉTRICO)
+       ========================================================================== */
+    @media (min-width: 992px) {
+        .django-form-inputs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.3fr;
+            column-gap: 3rem;
+            row-gap: 1.5rem;
+            align-items: start;
+        }
+
+        .django-form-inputs-grid p:has(textarea) {
+            grid-column: 2;
+            grid-row: 1 / span 3;
+            height: 100%;
+        }
+
+        .django-form-inputs-grid textarea {
+            height: 100% !important;
+            min-height: 250px;
+            resize: none;
+        }
+
+        .django-form-inputs-grid p:has(input[type="text"]),
+        .django-form-inputs-grid p:has(select) {
+            grid-column: 1;
+        }
+
+        .django-form-inputs-grid p:has(input[type="checkbox"]) {
+            grid-column: 1;
+        }
+    }
+    
+    .django-form-inputs-grid .errorlist {
+        list-style: none;
+        padding-left: 0;
+        color: #f87171;
+        font-size: 0.8rem;
+        margin-top: 0.25rem;
+    }
+</style>
+{% endblock %}

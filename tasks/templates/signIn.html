@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-center py-5" style="background-color: #020617; min-height: 80vh;">
+    <div class="container px-4">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5" style="max-width: 520px;">
+                
+                <div class="p-4 p-sm-5 rounded-4 shadow-lg border" style="background-color: #0f172a; border-color: #1e293b !important;">
+                    
+                    <div class="text-center mb-4">
+                        <h2 class="fw-black text-white mb-2" style="font-weight: 800; letter-spacing: -0.03em;">
+                            Iniciar Sesión
+                        </h2>
+                        <p class="text-secondary small">Organiza tu caos en un solo clic</p>
+                    </div>
+
+                    {% if error %}
+                    <div class="alert alert-danger py-2 px-3 rounded-3 border-0 small text-center mb-4 animate-shake" 
+                         style="background-color: rgba(239, 68, 68, 0.1); color: #f87171;">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ error }}
+                    </div>
+                    {% endif %}
+
+                    <form method="POST" autocomplete="off">
+                        {% csrf_token %}
+                        
+                        <div class="django-form-inputs mb-4">
+                            {{ form.as_p }}
+                        </div>
+
+                        <button type="submit" class="btn w-100 py-2.5 fw-bold rounded-3 transition-all" 
+                                style="background-color: #34d399; color: #020617; border: none; font-size: 0.95rem; transition: transform 0.2s;"
+                                onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='none'">
+                            Bienvenido de Nuevo
+                        </button>
+                    </form>
+
+                    <div class="text-center mt-4 pt-2 border-top" style="border-color: #1e293b !important;">
+                        <p class="text-secondary small mb-0">
+                            ¿No tienes una cuenta? <a href="/signUp/" style="color: #34d399; text-decoration: none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Registrate</a>
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .django-form-inputs p {
+        margin-bottom: 1.25rem;
+        display: flex;
+        flex-direction: column;
+    }
+    .django-form-inputs label {
+        color: #94a3b8;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    .django-form-inputs input {
+        display: block;
+        width: 100%;
+        padding: 0.5rem 0.75rem; /* Un poco más de padding interno para acompañar el ancho */
+        font-size: 0.95rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #f8fafc;
+        background-color: #020617;
+        background-clip: padding-box;
+        border: 1px solid #1e293b;
+        border-radius: 0.375rem;
+        transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    }
+    .django-form-inputs input:focus {
+        color: #f8fafc;
+        background-color: #020617;
+        border-color: #34d399;
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(52, 211, 153, 0.15);
+    }
+    .django-form-inputs .helptext {
+        font-size: 0.75rem;
+        color: #64748b;
+        margin-top: 0.25rem;
+    }
+</style>
+{% endblock %}

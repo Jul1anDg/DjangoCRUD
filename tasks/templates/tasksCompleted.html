@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="py-5" style="background-color: #020617; min-height: 80vh;">
+    <div class="container px-4" style="max-w: 1100px;">
+        
+        <div class="d-flex flex-col flex-md-row justify-content-between align-items-md-center gap-3 mb-5 pb-3 border-bottom" style="border-color: #1e293b !important;">
+            <div>
+                <h1 class="fw-black text-white mb-1" style="font-weight: 800; letter-spacing: -0.03em;">
+                    Tareas Completadas
+                </h1>
+                <p class="text-secondary small mb-0">Historial de objetivos alcanzados y pendientes resueltos</p>
+            </div>
+            
+            <div>
+                <a href="{% url 'tasks' %}" class="btn px-3 py-2 fw-medium text-slate-300 rounded-3 text-white" 
+                   style="background-color: #0f172a; border: 1px solid #1e293b; font-size: 0.9rem; transition: background-color 0.2s;"
+                   onmouseover="this.style.backgroundColor='#1e293b'" onmouseout="this.style.backgroundColor='#0f172a'">
+                    <i class="bi bi-arrow-left me-1"></i> Volver a Pendientes
+                </a>
+            </div>
+        </div>
+
+        <div class="row g-3">
+            {% for task in Tasks %}
+            <div class="col-12 col-md-6 col-lg-4">
+                
+                <div class="rounded-4 p-4 border h-100" 
+                     style="background-color: #0f172a; border-color: rgba(52, 211, 153, 0.15); opacity: 0.85; transition: opacity 0.2s;"
+                     onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.85'">
+                    
+                    <div class="d-flex flex-column h-100 justify-content-between">
+                        <div>
+                            <div class="d-flex align-items-start gap-2 mb-2">
+                                <span class="text-success" style="color: #34d399 !important; font-size: 1.1rem;">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                </span>
+                                <h2 class="h5 fw-bold text-white-50 text-decoration-line-through tracking-tight mb-0 pt-0.5">
+                                    {{ task.title }}
+                                </h2>
+                            </div>
+                            
+                            <p class="text-secondary small mb-4" style="color: #64748b !important; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.5;">
+                                {{ task.description }}
+                            </p>
+                        </div>
+
+                        <div class="pt-3 border-top d-flex align-items-center justify-content-between text-muted" style="border-color: #1e293b !important; font-size: 0.75rem; color: #64748b !important;">
+                            <span class="d-flex align-items-center gap-1">
+                                <i class="bi bi-calendar-check"></i> Completada:
+                            </span>
+                            <span class="fw-medium text-white-50">
+                                {{ task.date_completed|date:'M j, Y H:i' }}
+                            </span>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <div class="text-secondary mb-3" style="font-size: 2.5rem; opacity: 0.5;">🎯</div>
+                <h3 class="h5 text-white-50 fw-bold">No hay tareas archivadas</h3>
+                <p class="text-secondary small">Cuando termines un pendiente, aparecerá marcado en este historial.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}
