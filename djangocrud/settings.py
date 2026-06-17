@@ -80,14 +80,25 @@ WSGI_APPLICATION = 'djangocrud.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
-DATABASES = {
-    'default': dj_database_url.config(
-        default='postgresql://postgres:postgres@localhost/postgres',
-        conn_max_age=600
-    )
-}
-
+# ==============================================================================
+# CONFIGURACIÓN DE BASE DE DATOS ADAPTATIVA (Para Plan Gratuito)
+# ==============================================================================
+# Si existe la base de datos en el entorno y NO estamos solo compilando estáticos:
+if os.environ.get('DATABASE_URL') and 'collectstatic' not in sys.argv:
+    DATABASES = {
+        'default': dj_database_url.config(
+            conn_max_age=600,
+            ssl_require=True  # Obligatorio para conectar de forma segura a Render
+        )
+    }
+else:
+    # Base de datos local/temporal en archivo física para evitar caídas durante el Build
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
